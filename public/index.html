@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Employeego</title>
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <link href="/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+
+        <h1 class="title">Employeego - a Employee REST API</h1>
+        <div id="homepage">
+            <h1>Hire a employee in your area!</h1>
+            <div id="persons"></div>
+        </div>
+
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>  
+
+       <!-- create react component -->
+        <script type="text/babel">
+            class Employee extends React.Component{
+                constructor(){
+                    super()
+                    this.state = {
+                        person: []
+                    }
+
+                    this.handleSubmit = this.handleSubmit.bind(this)
+                    this.latValue = this.latValue.bind(this)
+                    this.longValue = this.longValue.bind(this)
+                }
+
+
+                latValue(e){
+                    let lat = e.target.value
+                    this.setState({
+                        lat: lat
+                    })
+                }
+
+                longValue(e){
+                    let long = e.target.value
+                    this.setState({
+                        long: long
+                    })
+                }
+
+                handleSubmit(e){
+                    e.preventDefault()
+                    let lat = this.state.lat
+                    let long = this.state.long
+
+                    fetch('/api/person?long='+ long +'&lat='+ lat)
+                    .then((data) => {
+                        return data.json()
+                    })
+                    .then(json => {
+                        this.setState({
+                            person: json
+                        })
+                    })
+                }
+
+                render(){
+                    let person = this.state.person
+                    console.log(person)
+                    person = person.map((persons, index) => {
+                        return(
+                            <li key={index}>
+                                <span className="true"></span>
+                                <span className="name">{persons.name}</span>
+                                <span className="rank">{persons.rank}</span>
+                                <span className="dist">{Math.floor(persons.dist.calculated/1000)} km</span>
+                            </li>
+                        )
+                    })
+                    return(
+                        <div id="ninja-container">
+                            <form id="search" onSubmit={this.handleSubmit}> 
+                                <label>Enter your latitude: </label>
+                                <input type="text" onChange={this.latValue} placeholder="latitude" required />
+                                <label>Enter your longitude: </label>
+                                <input type="text" onChange={this.longValue} placeholder="longitude" required />
+                                <input type="submit" value="Find Person" />
+                            </form>
+                            <ul>
+                                {person}
+                            </ul>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Employee />, document.getElementById("persons"))
+        </script>
+    </body>
+</html>
