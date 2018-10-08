@@ -1,5 +1,6 @@
 'use strict'
 const Person = require('../modules/person')
+const _ = require('lodash')
 
 module.exports = {
     insertPerson: (req, res) => {
@@ -30,30 +31,33 @@ module.exports = {
         })
     },
     getAllPerson: (req, res) => {
-        // Person
-        // .find()
-        // .then((person) => {
-        //     res.send(person)
-        // })
-        // .catch((e) => {
-        //     res.send(e)
-        // })
         
-        Person.aggregate([
-            {
-                $geoNear: {
-                    near: { type: "Point", coordinates: [parseFloat(req.query.long), parseFloat(req.query.lat)]},
-                    distanceField: "dist.calculated",
-                    maxDistance: 1000000, 
-                    spherical: true
-                }
-            }]
-        ).then((person) => {
-            res.send(person)
-        })
-        .catch(e => {
-            res.send(e)
-        })
+        if(_.isEmpty(req.query)){
+            Person
+            .find()
+            .then((person) => {
+                res.send(person)
+            })
+            .catch((e) => {
+                res.send(e)
+            })
+        } else {
+            Person.aggregate([
+                {
+                    $geoNear: {
+                        near: { type: "Point", coordinates: [parseFloat(req.query.long), parseFloat(req.query.lat)]},
+                        distanceField: "dist.calculated",
+                        maxDistance: 1000000, 
+                        spherical: true
+                    }
+                }]
+            ).then((person) => {
+                res.send(person)
+            })
+            .catch(e => {
+                res.send(e)
+            })
+        }
     },
     updatePerson: (req, res) => {
         Person

@@ -1,12 +1,12 @@
-#NODEJS API-MONGO & REACT
+# NODEJS API-MONGO & REACT
 
---> need install:
+1. need install:
 - mongodb
 
---> setting .env
---> npm install
+2. setting .env
+3. npm install
 
---> run the apps http://localhost:3000/index.html
+4. run the apps http://localhost:3000/index.html
 
 ## API Endpoint
 |  Method  | Endpoint              | Description                 | Data                            |

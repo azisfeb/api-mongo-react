@@ -1,13 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+require('dotenv').config()
 //set up express app
 const app = express()
 
 const api = require('./routes/api')
 
 //connect mongodb
-mongoose.connect('mongodb://localhost:27017/Employee', {
+mongoose.connect('mongodb://localhost:27017/'+process.env.DB_NAME, {
     useNewUrlParser: true,
     useCreateIndex: true
 })
