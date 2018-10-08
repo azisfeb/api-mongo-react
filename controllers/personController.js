@@ -7,7 +7,10 @@ module.exports = {
         newPerson
         .save()
         .then(() => {
-            res.send({state: "success"})
+            res.send({
+                type: "POST",
+                state: "success"
+            })
         })
         .catch((err) => {
             res.send({ 
@@ -60,6 +63,16 @@ module.exports = {
                 type: "PUT",
                 status: "success"
             })
+        })
+        .catch((e) => {
+            res.send(e)
+        })
+    },
+    getPersonById: (req, res) => {
+        Person
+        .findOne({ _id: req.params.id })
+        .then((data) => {
+            res.send(data)
         })
         .catch((e) => {
             res.send(e)
